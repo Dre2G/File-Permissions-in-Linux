@@ -16,140 +16,117 @@ In this scenerio, I am security professional at a large organization. I mainly w
 on tis team are authorized with the appropriate permissions.
 
 I am tasked with examining existing permissions on the file system. I will need to determine if the permissions match the authorization 
-that should be given. If they do not match, you'll need to modify the permisions to authorize the appropriate users and remove 
-any unauthorized access
+that should be given. If they do not match, I'll need to modify the permisions to authorize the appropriate users and remove 
+any unauthorized access.
 
 <p >
-<h3> Retrieve after hours failed login attempts</h3>
-There was a potential security incident that occurred after business hours (after 18:00). All 
-after hours login attempts that failed need to be investigated.
-
-The following code demonstrates how I created a SQL query to filter for a failed login attempts
-that occurrred after business hours.
+<h3> Check file and directory details </h3>
+The following code demonstrates how I used Linux commands to determine the existing
+permissions set for a specific directory in the file system.
   
 <br align="center"/>
-<img src="https://imgur.com/OzDVrcM.png" height="80%" width="80%" alt="Control Categories"/>
+<img src=".png" height="80%" width="80%" alt="Control Categories"/>
 <br />
 
-The first part of the screenshot is my query and the second part is a portion of the output.
-This query filters for failed login attempts that occcurred after 18:00. First, I start 
-by selecting all data from the <em> log_in_attempts </em> table. Then, I used a <em> WHERE </em> clause with an <em> AND </em> operator
-to filter my results to output only login attempts that occurred after 18:00 and were unsuccessful. The first condition
-is <em> login_time > '18:00' </em>, which filters for the login attempts that occurred after 18:00. The second condition
-is <em> success = FALSE </em>, which filters for the failed login attempts.
+The first line of the screenshot displays the command I entered, and the other lines display the
+output. The code lists all contents of the <em>projects</em> directory. I used the <em>ls</em> command with the
+<em>-la</em> option to display a detailed listing of the file contents that also returned hidden files. The
+output of my command indicates that there is one directory named <em>drafts</em>, one hidden file
+named <em>.project_x.txt</em>, and five other project files. The 10-character string in the first
+column represents the permissions set on each file or directory.
  
-<h3> Retrieve login attempts on specific dates</h3>
-A suspicious event occurred on 2022-05-09. Any login activity that happened on 2022--05-09 
-or on the day before needs to be investigated.
+<h3> Describe the permissions string </h3>
 
-The following code demonstrates how I created a SQL query to filters for login attempts that 
-occurred on specific dates.
+The 10-character string can be deconstructed to determine who is authorized to access the
+file and their specific permissions. The characters and what they represent are as follows:
+- <b>1st character</b>: This character is either a <em>d</em> or hyphen <em>(-)</em> and indicates the file type. If it’s
+a <em>d</em>, it’s a directory. If it’s a hyphen <em>(-)</em>, it’s a regular file.
+-   <b>2nd-4th characters</b>: These characters indicate the read <em>(r)</em>, write <em>(w)</em>, and execute <em>(x)</em>
+permissions for the user. When one of these characters is a hyphen <em>(-)</em> instead, it
+indicates that this permission is not granted to the user.
+-   <b>5th-7th characters</b>: These characters indicate the read <em>(r)</em>, write <em>(w)</em>, and execute <em>(x)</em>
+permissions for the group. When one of these characters is a hyphen <em>(-)</em> instead, it
+indicates that this permission is not granted for the group.
+-   <b>8th-10th characters</b>: These characters indicate the read <em>(r)</em>, write <em>(w)</em>, and execute <em>(x)</em>
+permissions for other. This owner type consists of all other users on the system apart
+from the user and the group. When one of these characters is a hyphen <em>(-)</em> instead,
+that indicates that this permission is not granted for other.
 
-<img src="https://imgur.com/kMMW0o6.png" height="80%" width="80%" alt="summery Audit Scope and Goals"/>
+For example, the file permissions for <em>project_t.txt</em> are <em>-rw-rw-r--</em>. Since the first
+character is a hyphen <em>(-)</em>, this indicates that <em>project_t.txt</em> is a file, not a directory. The
+second, fifth, and eighth characters are all <em>(r)</em>, which indicates that user, group, and other all have
+read permissions. The third and sixth characters are <em>(w)</em>, which indicates that only the user and
+group have write permissions. No one has execute permissions for <em>project_t.txt</em>.
+
 <br />
 
-The first part of the screenshot is my query, and the second part is a portion of the output.
-This query returns all login attempts that occurred on 2022-05-09 or 2022-05-08. First, I 
-started by selecting all data from the <em> log_in_attempts </em> table. Then, I used a <em> WHERE </em> clause
-with an <em> OR </em> operator to filter my results to output only login attempts that occurred on either
-2022-05-09 or 2022-05-08. The first condition is <em> login_date  = '2022-05-09'</em>, which
-filters for logins on 2022-05-09. The second condition is <em>login_date = '2022-05-08'</em>,
-which filters for logins on 2022-05-08.
+<h3>Change file permissions</h3>
 
-<br />
+The organization determined that other shouldn't have write access to any of their files. To
+comply with this, I referred to the file permissions that I previously returned. I determined
+<em>project_k.txt</em> must have the write access removed for other.
 
-<h3>Retrieve login attempts outside of Mexico</h3>
-
-After investigating the organization’s data on login attempts, I believe there is an issue with the
-login attempts that occurred outside of Mexico. These login attempts should be investigated.
-
-The following code demonstrates how I created a SQL query to filter for login attempts that
-occurred outside of Mexico
+The following code demonstrates how I used Linux commands to do this:
 
 <br/>
-<img src="https://imgur.com/AQkZsi4.png" height="80%" width="80%" alt="Control Categories"/>
+<img src=".png" height="80%" width="80%" alt="Control Categories"/>
 <br />
 
-The first part of the screenshot is my query, and the second part is a portion of the output.
-This query returns all login attempts that occurred in countries other than Mexico. First, I
-started by selecting all data from the <em>log_in_attempts</em> table. Then, I used a <em>WHERE</em> clause
-with <em>NOT</em> to filter for countries other than Mexico. I used <em>LIKE</em> with <em>MEX%</em> as the pattern to
-match because the dataset represents Mexico as MEX and MEXICO. The percentage sign <em>(%)</em>
-represents any number of unspecified characters when used with <em>LIKE</em>.
+The first two lines of the screenshot display the commands I entered, and the other lines
+display the output of the second command. The <em>chmod</em> command changes the permissions on
+files and directories. The first argument indicates what permissions should be changed, and
+the second argument specifies the file or directory. In this example, I removed write
+permissions from other for the <em>project_k.txt</em> file. After this, I used <em>ls -la</em> to review the
+updates I made.
 
 
 <br />
 
-<h3>Retrieve employees in Marketing</h3>
+<h3>Changing file permissions on hidden file</h3>
 
-My team wants to update the computers for certain employees in the Marketing department.
-To do this, I have to get information on which employee machines to update.
+The research team at my organization recently archived project_x.txt. They do not want
+anyone to have write access to this project, but the user and group should have read access.
 
-The following code demonstrates how I created a SQL query to filter for employee machines
-from employees in the Marketing department in the East building.
+The following code demonstrates how I used Linux commands to change the permissions:
 
 <br/>
-<img src="https://imgur.com/JD4kEya.png" height="80%" width="80%" alt="Compliance Checklist choices"/>
+<img src=".png" height="80%" width="80%" alt="Compliance Checklist choices"/>
 <br />
 
-The first part of the screenshot is my query, and the second part is a portion of the output.
-This query returns all employees in the Marketing department in the East building. First, I
-started by selecting all data from the <em>employees</em> table. Then, I used a <em>WHERE</em> clause with <em>AND</em>
-to filter for employees who work in the Marketing department and in the East building. I used
-<em>LIKE</em> with <em>East%</em> as the pattern to match because the data in the <em>office</em> column represents
-the East building with the specific office number. The first condition is the <em>department =
-'Marketing'</em> portion, which filters for employees in the Marketing department. The second
-condition is the <em>office LIKE 'East%'</em> portion, which filters for employees in the East
-building.
+The first two lines of the screenshot display the commands I entered, and the other lines
+display the output of the second command. I know <em>.project_x.txt</em> is a hidden file because
+it starts with a period <em>(.)</em>. In this example, I removed write permissions from the user and
+group, and added read permissions to the group. I removed write permissions from the user
+with <em>u-w</em>. Then, I removed write permissions from the group with <em>g-w</em>, and added read
+permissions to the group with <em>g+r</em>.
+
 
 <br />
 
-<h3>Retrieve employees in Finance or Sales</h3>
+<h3>Change directory permissions</h3>
 
-The machines for employees in the Finance and Sales departments also need to be updated.
-Since a different security update is needed, I have to get information on employees only from
-these two departments.
-The following code demonstrates how I created a SQL query to filter for employee machines
-from employees in the Finance or Sales departments.
+My organization only wants the <em>researcher2</em> user to have access to the <em>drafts</em> directory
+and its contents. This means that no one other than <em>researcher2</em> should have execute
+permissions.
+
+The following code demonstrates how I used Linux commands to change the permissions:
+
 
 <br/>
-<img src="https://imgur.com/fJISnIs.png" height="80%" width="80%" alt="Risk Assessment"/>
+<img src=".png" height="80%" width="80%" alt="Risk Assessment"/>
 <br />
 
-The first part of the screenshot is my query, and the second part is a portion of the output.
-This query returns all employees in the Finance and Sales departments. First, I started by
-selecting all data from the <em>employees</em> table. Then, I used a <em>WHERE</em> clause with <em>OR</em> to filter for
-employees who are in the Finance and Sales departments. I used the <em>OR</em> operator instead of
-<em>AND</em> because I want all employees who are in either department. The first condition is
-<em>department = 'Finance'</em>, which filters for employees from the Finance department. The
-second condition is <em>department = 'Sales'</em>, which filters for employees from the Sales
-department.
-
-<br />
-
-<h3>Retrieve all employees not in IT</h3>
-
-My team needs to make one more security update on employees who are not in the
-Information Technology department. To make the update, I first have to get information on
-these employees.
-
-The following demonstrates how I created a SQL query to filter for employee machines from
-employees not in the Information Technology department.
-
-<br/>
-<img src="https://imgur.com/n673u8R.png" height="80%" width="80%" alt="Risk Assessment"/>
-<br />
-
-The first part of the screenshot is my query, and the second part is a portion of the output. The
-query returns all employees not in the Information Technology department. First, I started by
-selecting all data from the <em>employees</em> table. Then, I used a <em>WHERE</em> clause with <em>NOT</em> to filter for
-employees not in this department
+The first two lines of the screenshot display the commands I entered, and the other lines
+display the output of the second command. I previously determined that the group had
+execute permissions, so I used the <em>chmod</em> command to remove them. The <em>researcher2</em> user
+already had execute permissions, so they did not need to be added.
 
 <br />
 
 <h3>Summary</h3>
 
-I applied filters to SQL queries to get specific information on login attempts and employee
-machines. I used two different tables, <em>log_in_attempts</em> and <em>employees</em>. I used the <em>AND</em>,
-<em>OR</em>, and <em>NOT</em> operators to filter for the specific information needed for each task. I also used
-LIKE and the percentage sign <em>(%)</em> wildcard to filter for patterns
+I changed multiple permissions to match the level of authorization my organization wanted for
+files and directories in the <em>projects</em> directory. The first step in this was using <em>ls -la</em> to
+check the permissions for the directory. This informed my decisions in the following steps. I
+then used the <em>chmod</em> command multiple times to change the permissions on files and
+directories
