@@ -25,7 +25,7 @@ The following code demonstrates how I used Linux commands to determine the exist
 permissions set for a specific directory in the file system.
   
 <br align="center"/>
-<img src=".png" height="80%" width="80%" alt="Control Categories"/>
+<img src="https://imgur.com/CLqvhQ0.png" height="80%" width="80%" alt="Control Categories"/>
 <br />
 
 The first line of the screenshot displays the command I entered, and the other lines display the
@@ -69,7 +69,7 @@ comply with this, I referred to the file permissions that I previously returned.
 The following code demonstrates how I used Linux commands to do this:
 
 <br/>
-<img src=".png" height="80%" width="80%" alt="Control Categories"/>
+<img src="https://imgur.com/uEcfgI7.png" height="80%" width="80%" alt="Control Categories"/>
 <br />
 
 The first two lines of the screenshot display the commands I entered, and the other lines
@@ -90,7 +90,7 @@ anyone to have write access to this project, but the user and group should have 
 The following code demonstrates how I used Linux commands to change the permissions:
 
 <br/>
-<img src=".png" height="80%" width="80%" alt="Compliance Checklist choices"/>
+<img src="https://imgur.com/OUoRCU8.png" height="80%" width="80%" alt="Compliance Checklist choices"/>
 <br />
 
 The first two lines of the screenshot display the commands I entered, and the other lines
@@ -113,7 +113,7 @@ The following code demonstrates how I used Linux commands to change the permissi
 
 
 <br/>
-<img src=".png" height="80%" width="80%" alt="Risk Assessment"/>
+<img src="https://imgur.com/VGs0H0M.png" height="80%" width="80%" alt="Risk Assessment"/>
 <br />
 
 The first two lines of the screenshot display the commands I entered, and the other lines
